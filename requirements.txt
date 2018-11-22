@@ -1,0 +1,12 @@
+nltk
+jupyter
+matplotlib
+sklearn
+scipy
+numpy
+pandas
+gensim
+torch
+torchvision
+gensim
+google-compute-engine
