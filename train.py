@@ -9,7 +9,7 @@ import torch.optim as optim
 import numpy as np
 
 from models import TextCNN
-from utils import (load, num_batches, minibatch_iter,
+from utils import (Vocabulary, load, num_batches, minibatch_iter,
                    accuracy, compute_dataset_stats)
 
 class StatsLogger:
@@ -37,7 +37,7 @@ def train(name, dataset, epochs, batch_size, learning_rate, regularization,
     print('Loading data')
     X_train, y_train = load('{}_train'.format(dataset))
     X_valid, y_valid = load('{}_valid'.format(dataset))
-    vocab = load('{}_vocab'.format(dataset))
+    vocab = load('{}_vocab'.format(dataset)).vocab
 
     X_train = torch.as_tensor(X_train, dtype=torch.long)
     y_train = torch.as_tensor(y_train, dtype=torch.float)
@@ -102,7 +102,7 @@ def train(name, dataset, epochs, batch_size, learning_rate, regularization,
         model.eval()
         train_loss, train_acc = np.mean(epoch_loss), np.mean(epoch_acc)
         valid_loss, valid_acc, _ = compute_dataset_stats(
-            X_valid, y_valid, model, nn.BCEWithLogitsLoss(), batch_size*2
+            X_valid, y_valid, model, nn.BCEWithLogitsLoss(), 256
         )
 
         stats = [epoch + 1, train_loss, train_acc, valid_loss, valid_acc]
@@ -114,9 +114,7 @@ def train(name, dataset, epochs, batch_size, learning_rate, regularization,
         # checkpoint model
         if prev_acc < valid_acc:
             prev_acc = valid_acc
-            model_path = os.path.join(dirname, 'checkpoints', '{}_{}_e{}_{}.th'.format(
-                name, run_uid, epoch + 1, valid_acc
-            ))
+            model_path = os.path.join(dirname, 'checkpoints', name)
             torch.save(model.state_dict(), model_path)
     
     logger.close()
