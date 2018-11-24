@@ -36,36 +36,30 @@ class TextCNN(nn.Module):
             self.embeddings.weight.requires_grad = True
         else:
             embs_path = '{}_{}_embs'.format(dataset, embedding_type)
-            print('Using', embs_path)
             weights = torch.as_tensor(load(embs_path)).float()
             self.embeddings = nn.Embedding.from_pretrained(
                 weights,
                 freeze=False
             )
         
-        self.block1 = _NgramBlock(input_size, (2, embedding_dims))
-        self.block2 = _NgramBlock(input_size, (3, embedding_dims))
-        self.block3 = _NgramBlock(input_size, (4, embedding_dims))
-        self.block4 = _NgramBlock(input_size, (5, embedding_dims))
+        self.block1 = _NgramBlock(input_size, (3, embedding_dims))
+        self.block2 = _NgramBlock(input_size, (4, embedding_dims))
+        self.block3 = _NgramBlock(input_size, (5, embedding_dims))
 
         self.dropout = nn.Dropout(0.5)
-        self.fc = nn.Linear(channels*4, 128)
-        self.fc2 = nn.Linear(128, 2)
+        self.fc = nn.Linear(channels*3, 2)
         self.relu = nn.ReLU(True)
 
-        nn.init.constant_(self.fc2.weight, 0)
-        nn.init.constant_(self.fc2.bias, 0)
+        nn.init.constant_(self.fc.weight, 0)
+        nn.init.constant_(self.fc.bias, 0)
     
     def forward(self, x):
         x = self.embeddings(x)[:,None,:,:]
         x = torch.cat((
             self.block1(x),
             self.block2(x),
-            self.block3(x),
-            self.block4(x)
+            self.block3(x)
         ),-1)
         x = self.dropout(x)
         x = self.fc(x)
-        x = self.relu(x)
-        x = self.fc2(x)
         return x
