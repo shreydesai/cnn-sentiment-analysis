@@ -5,7 +5,7 @@ import pickle
 import numpy as np
 import gensim
 
-from utils import encode_sent, clean_str
+from utils import Vocabulary, encode_sent, clean_str
 
 def read_file(path):
     f = open(path)
@@ -60,19 +60,6 @@ def create_embeddings(ds_vocab, emb_vocab, emb_vectors, emb_dims):
     
     return (embeddings, found)
 
-class Vocabulary:
-    
-    def __init__(self, corpus):
-        vocab = set()
-        for sent in corpus:
-            for word in sent.split(' '):
-                if word not in vocab:
-                    vocab.add(word)
-        
-        self.vocab = list(vocab)
-        self.encoding = {w:i for i,w in enumerate(self.vocab, 1)}
-        self.decoding = {i:w for i,w in enumerate(self.vocab, 1)}
-
 def create_mr():
     pos = read_file('raw_datasets/rt-polarity.pos')
     neg = read_file('raw_datasets/rt-polarity.neg')
@@ -120,7 +107,7 @@ def create_mr():
     # save objects
     save_object('datasets/mr_train', (X_train, y_train))
     save_object('datasets/mr_valid', (X_valid, y_valid))
-    save_object('datasets/mr_vocab', mr_vocab.vocab)
+    save_object('datasets/mr_vocab', mr_vocab)
     save_object('datasets/mr_w2v_embs', w2v_embeddings)
     save_object('datasets/mr_glove_embs', glove_embeddings)
     save_object('datasets/mr_nb_embs', nb_embeddings)
@@ -173,7 +160,7 @@ def create_mpqa():
     # save objects
     save_object('datasets/mpqa_train', (X_train, y_train))
     save_object('datasets/mpqa_valid', (X_valid, y_valid))
-    save_object('datasets/mpqa_vocab', mpqa_vocab.vocab)
+    save_object('datasets/mpqa_vocab', mpqa_vocab)
     save_object('datasets/mpqa_w2v_embs', w2v_embeddings)
     save_object('datasets/mpqa_glove_embs', glove_embeddings)
     save_object('datasets/mpqa_nb_embs', nb_embeddings)
@@ -237,7 +224,7 @@ def create_sst2():
     save_object('datasets/sst_train', (X_train, y_train))
     save_object('datasets/sst_valid', (X_valid, y_valid))
     save_object('datasets/sst_test', (X_test, y_test))
-    save_object('datasets/sst_vocab', sst_vocab.vocab)
+    save_object('datasets/sst_vocab', sst_vocab)
     save_object('datasets/sst_w2v_embs', w2v_embeddings)
     save_object('datasets/sst_glove_embs', glove_embeddings)
     save_object('datasets/sst_nb_embs', nb_embeddings)

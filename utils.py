@@ -5,6 +5,20 @@ import pickle
 import numpy as np
 import torch
 
+class Vocabulary:
+    
+    def __init__(self, corpus):
+        vocab = set()
+        for sent in corpus:
+            for word in sent.split(' '):
+                if word not in vocab:
+                    vocab.add(word)
+        
+        self.vocab = list(vocab)
+        self.encoding = {w:i for i,w in enumerate(self.vocab, 1)}
+        self.decoding = {i:w for i,w in enumerate(self.vocab, 1)}
+
+
 def load(path):
     f = open(os.path.join('datasets', path), 'rb')
     obj = pickle.load(f)
