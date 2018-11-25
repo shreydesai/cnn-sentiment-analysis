@@ -18,7 +18,6 @@ class Vocabulary:
         self.encoding = {w:i for i,w in enumerate(self.vocab, 1)}
         self.decoding = {i:w for i,w in enumerate(self.vocab, 1)}
 
-
 def load(path):
     f = open(os.path.join('datasets', path), 'rb')
     obj = pickle.load(f)
