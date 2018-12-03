@@ -12,7 +12,7 @@ Use `python3 create_datasets.py` to build the datasets from their raw formats.
 
 Use `train.sh` to train all the models on each dataset and embedding type. For more fine-grained training, refer to the individual flags provided in `train.py`. For example, the following command can be used to train a CNN on the Movie Reviews corpus using Word2Vec embeddings:
 
-```python
+```bash
 python3 train.py --name=cnn_mr_rand --dataset=mr \
                  --epochs=20 --batch=32 --lr=1e-4 \
                  --reg=1e-3 --edims=300 --etype=w2v
