@@ -1,6 +1,6 @@
 # CNN Sentiment Analysis
 
-This repository provides code for "Word Embedding Aware Convolutional Networks for Sentiment Analysis". We evaluate various word embeddings on the performance of convolutional networks in the context of sentiment analysis tasks.
+This repository provides code for "Word Embedding Aware Convolutional Networks for Sentiment Analysis". We evaluate various word embeddings on the performance of convolutional networks in the context of sentiment analysis tasks. The paper is available [here](https://github.com/shreydesai/cnn-sentiment-analysis/blob/master/paper/paper.pdf).
 
 ## Datasets
 
